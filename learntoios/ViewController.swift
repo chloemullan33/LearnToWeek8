@@ -15,9 +15,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var emailAddress: UITextField!
     @IBOutlet weak var password: UITextField!
     
-    //label for displaying message
-    @IBOutlet weak var label: UILabel!
-    
     //button for registration
     @IBAction func registerButton(_ sender: UIButton) {
         let email = emailAddress.text
@@ -25,9 +22,16 @@ class ViewController: UIViewController {
 
         Auth.auth().createUser(withEmail: email!, password: password!, completion: { (user, error) in
             if error == nil {
-                self.label.text = "You are successfully registered"
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "home")
+                self.present(vc!, animated: true, completion: nil)
+                
             } else {
-                self.label.text = "Error, please try again"
+                let alertController = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
+                
+                let defaultAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                alertController.addAction(defaultAction)
+                
+                self.present(alertController, animated: true, completion: nil)
             }
         })
     }
